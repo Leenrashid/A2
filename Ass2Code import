@@ -1,10 +1,11 @@
 from typing import List
+
 # Class: Ebook
 class Ebook:
     """
     Represents an individual ebook with details such as title, writer, publishinghouse, and availability.
     """
-    def _init_(self, bookTitle: str, writer: str, publishingHouse: str, cost: float, bookGenre: str, bookISBN: str, isAvailable: bool):
+    def __init__(self, bookTitle: str, writer: str, publishingHouse: str, cost: float, bookGenre: str, bookISBN: str, isAvailable: bool):
         self.bookTitle = bookTitle
         self.writer = writer
         self.publishingHouse = publishingHouse
@@ -69,7 +70,7 @@ class Ebook:
     def setAvailability(self, isAvailable: bool) -> None:
         self.isAvailable = isAvailable
 
-    def str(self) -> str:
+    def __str__(self) -> str:
         return (f"Ebook(bookTitle={self.bookTitle}, writer={self.writer}, publishingHouse={self.publishingHouse}, "
                 f"cost={self.cost}, bookGenre={self.bookGenre}, bookISBN={self.bookISBN}, isAvailable={self.isAvailable})")
 
@@ -78,11 +79,11 @@ class Ebook:
 class EbookStore:
     """
     Aggregation Relationship:
-    - EbookStore contains a collection of Ebook objects (self.ebooklist).
-    - The Ebook objects exist independently of the store.
-    - Multiplicity: 1..* (one store has many ebooks).
+    EbookStore contains a collection of Ebook objects (self.ebooklist).
+    The Ebook objects exist independently of the store.
+    Multiplicity: 1..* (one store has many ebooks).
     """
-    def _init_(self, storeName: str, location: str, contactNumber: str, emailAddress: str):
+    def __init__(self, storeName: str, location: str, contactNumber: str, emailAddress: str):
         self.ebooklist: List[Ebook] = []  # List to store Ebook objects
         self.storeName = storeName         # Name of the store
         self.location = location           # Location of the store
@@ -136,7 +137,7 @@ class EbookStore:
         """Sets the email address of the store."""
         self.emailAddress = emailAddress
 
-    def str(self) -> str:
+    def __str__(self) -> str:
         """Returns a string representation of the EbookStore."""
         ebook_titles = ', '.join(ebook.bookTitle for ebook in self.ebooklist)
         return (f"EbookStore(storeName={self.storeName}, location={self.location}, "
@@ -150,15 +151,15 @@ class ShoppingCart:
     Represents a user's shopping cart, which can hold multiple ebook items.
 
     Relationship:
-    - ShoppingCart has a composition relationship with Ebook, meaning it includes Ebook instances in its book collection.
-    - If the cart is deleted, all ebook references within it are logically removed from the cart.
-    - This setup allows a single cart to hold many ebooks, reflecting a one-to-many (1..*) relationship.
+    ShoppingCart has a composition relationship with Ebook, meaning it includes Ebook instances in its book collection.
+    If the cart is deleted, all ebook references within it are logically removed from the cart.
+    This setup allows a single cart to hold many ebooks, reflecting a one-to-many (1..*) relationship.
 
     Association:
-    - Linked to the Order class as part of the purchase process.
+    Linked to the Order class as part of the purchase process.
     """
 
-    def _init_(self, dateCreated: str, lastModified: str, status: str):
+    def __init__(self, dateCreated: str, lastModified: str, status: str):
         self.bookCollection: List[Ebook] = []  # Holds Ebook objects in the cart
         self.totalCost = 0.0  # The cumulative cost of all items in the cart
         self.dateCreated = dateCreated  # The date the cart was initially created
@@ -230,7 +231,7 @@ class ShoppingCart:
         """Sets the current status of the cart."""
         self.status = status
 
-    def str(self) -> str:
+    def __str__(self) -> str:
         """Provides a detailed string summary of the ShoppingCart, including total cost and ebook titles."""
         ebook_titles = ', '.join(ebook.bookTitle for ebook in self.bookCollection)
         return (f"ShoppingCart(totalCost={self.totalCost}, dateCreated={self.dateCreated}, "
@@ -243,9 +244,9 @@ class Order:
     Represents an order placed by the customer.
 
     Association:
-    - Linked to the ShoppingCart class to retrieve items and calculate totals.
+    Linked to the ShoppingCart class to retrieve items and calculate totals.
     """
-    def _init_(self, orderNumber: str, orderPlacementDate: str, currentStatus: str, cartDetails: ShoppingCart):
+    def __init__(self, orderNumber: str, orderPlacementDate: str, currentStatus: str, cartDetails: ShoppingCart):
         self.orderNumber = orderNumber
         self.orderPlacementDate = orderPlacementDate
         self.currentStatus = currentStatus
@@ -322,7 +323,7 @@ class Order:
     def setSalesVAT(self, salesVAT: float) -> None:
         self.salesVAT = salesVAT
 
-    def _str_(self):
+    def __str__(self):
         return (
             f"Order(orderNumber={self.orderNumber}, orderPlacementDate={self.orderPlacementDate}, "
             f"currentStatus={self.currentStatus}, preDiscountTotal={self.preDiscountTotal}, "
@@ -336,7 +337,7 @@ class Discount:
     """
     Represents a generic discount. Acts as a base class for specific discount types.
     """
-    def _init_(self, discountRate: float, description: str, discountActive: bool):
+    def __init__(self, discountRate: float, description: str, discountActive: bool):
         self._discount_percentage = discountRate  # Protected attribute for discount rate
         self._description = description  # Protected attribute for description
         self._discountActive = discountActive  # Protected attribute for whether the discount is active
@@ -359,7 +360,7 @@ class Discount:
     def setDiscountActive(self, discountActive: bool) -> None:
         self._discountActive = discountActive
 
-    def _str_(self) -> str:
+    def __str__(self) -> str:
         return (f"Discount(discountRate={self._discount_percentage}, "
                 f"description={self._description}, discountActive={self._discountActive})")
 
@@ -369,11 +370,11 @@ class BillingInvoice:
     Represents a billing invoice containing details about a customer's order.
 
     Relationships:
-    - Aggregates a Customer and an Order to provide detailed billing information.
-    - Multiplicity: 1..1 relationship with both Customer and Order.
+    Aggregates a Customer and an Order to provide detailed billing information.
+    Multiplicity: 1..1 relationship with both Customer and Order.
     """
 
-    def _init_(self, invoiceNumber: str, invoiceDate: str, totalAmount: float, vat: float,
+    def __init__(self, invoiceNumber: str, invoiceDate: str, totalAmount: float, vat: float,
                  discountValue: float, netAmount: float, customerDetails: str):
         """
         Initialize a billing invoice with basic details.
@@ -476,12 +477,11 @@ class BillingInvoice:
         print(f"VAT of {vatPercentage}% applied. VAT value: ${self.vat:.2f}")
 
     # String representation
-    def _str_(self) -> str:
+    def __str__(self) -> str:
         return (f"BillingInvoice(invoiceNumber={self.invoiceNumber}, invoiceDate={self.invoiceDate}, "
                 f"totalAmount={self.totalAmount}, vat={self.vat}, discountValue={self.discountValue}, "
                 f"netAmount={self.netAmount}, customerDetails={self.customerDetails}, "
                 f"orderDetails={self.orderDetails})")
-
 
 
 # Class: LoyaltyDiscount
@@ -490,12 +490,12 @@ class LoyaltyDiscount(Discount):
     Represents a special discount provided to loyalty members, based on certain eligibility criteria.
 
     Relationship:
-    - Inherits from the Discount class to extend its functionality by adding loyalty-based features.
-    - Offers a targeted discount only for customers who meet specific loyalty criteria.
+    Inherits from the Discount class to extend its functionality by adding loyalty-based features.
+    Offers a targeted discount only for customers who meet specific loyalty criteria.
     """
-    def _init_(self, discountRate: float, isLoyaltyMember: bool, discountActive: bool,
+    def __init__(self, discountRate: float, isLoyaltyMember: bool, discountActive: bool,
                  description: str, eligibility: bool):
-        super()._init_(discountRate, description, discountActive)  # Initialize the base class attributes
+        super().__init__(discountRate, description, discountActive)  # Initialize the base class attributes
         self._isLoyaltyMember = isLoyaltyMember  # Indicates if the user is a loyalty member
         self._eligibility = eligibility  # Indicates if the user is eligible for the discount
 
@@ -511,7 +511,7 @@ class LoyaltyDiscount(Discount):
     def setEligibility(self, eligibility: bool) -> None:
         self._eligibility = eligibility
 
-    def _str_(self) -> str:
+    def __str__(self) -> str:
         return (f"LoyaltyDiscount(discountRate={self._discount_percentage}, isLoyaltyMember={self._isLoyaltyMember}, "
                 f"discountActive={self._discountActive}, description={self._description}, eligibility={self._eligibility})")
 
@@ -522,12 +522,12 @@ class BulkingDiscount(Discount):
     Provides a special discount for orders that meet a minimum quantity requirement.
 
     Relationship:
-    - Inherits from the Discount class, with additional criteria specific to bulk purchases.
-    - Only orders with a certain minimum quantity can qualify for this discount, making it suitable for large orders.
+    Inherits from the Discount class, with additional criteria specific to bulk purchases.
+    Only orders with a certain minimum quantity can qualify for this discount, making it suitable for large orders.
     """
-    def _init_(self, bulkDiscountRate: float, minimumQuantity: int, discountActive: bool,
+    def __init__(self, bulkDiscountRate: float, minimumQuantity: int, discountActive: bool,
                  description: str, eligibility: bool):
-        super()._init_(bulkDiscountRate, description, discountActive)  # Initialize the base class attributes
+        super().__init__(bulkDiscountRate, description, discountActive)  # Initialize the base class attributes
         self._minimumQuantity = minimumQuantity  # Minimum quantity required for the discount
         self._eligibility = eligibility  # Indicates if the order is eligible for the discount
 
@@ -543,8 +543,9 @@ class BulkingDiscount(Discount):
     def setEligibility(self, eligibility: bool) -> None:
         self._eligibility = eligibility
 
-    def _str_(self) -> str:
+    def __str__(self) -> str:
         return (f"BulkingDiscount(bulkDiscountRate={self._discount_percentage}, minimumQuantity={self._minimumQuantity}, "
                 f"discountActive={self._discountActive}, description={self._description}, eligibility={self._eligibility})")
+
 
 

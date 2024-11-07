@@ -1,1 +1,182 @@
+# Test script for the provided classes
 
+# Testing the Ebook class
+ebook1 = Ebook("Python Programming", "Leen Rashid", "TechBooks", 29.99, "Programming", "1234567890", True)
+ebook2 = Ebook("Advanced Networking", "Snowy II", "NetBooks", 45.00, "Networking", "0987654321", True)
+ebook3 = Ebook("Data Science Essentials", "Abdullah Mohamed", "DataBooks", 39.95, "Data Science", "1122334455", True)
+
+# Test Ebook methods
+ebook1.addBook()  # Add book to the catalog
+ebook1.deleteBook()  # Remove book
+assert ebook1.searchBook("Python") is not None, "Search failed for 'Python'"
+assert ebook1.searchBook("Ruby") is None, "Search incorrectly matched 'Ruby'"
+
+# Test Ebook setters and getters
+ebook1.setBookTitle("Advanced Python Programming")
+assert ebook1.getBookTitle() == "Advanced Python Programming"
+
+ebook1.setWriter("Afshan Parker")
+assert ebook1.getWriter() == "Afshan Parker"
+
+ebook1.setPublishingHouse("AdvancedTechBooks")
+assert ebook1.getPublishingHouse() == "AdvancedTechBooks"
+
+ebook1.setCost(34.99)
+assert ebook1.getCost() == 34.99
+
+ebook1.setBookGenre("Advanced Programming")
+assert ebook1.getBookGenre() == "Advanced Programming"
+
+ebook1.setBookISBN("9876543210")
+assert ebook1.getBookISBN() == "9876543210"
+
+ebook1.setAvailability(False)
+assert ebook1.checkAvailability() is False
+
+print("Ebook test successful:", ebook1)
+
+# Testing the EbookStore class
+store = EbookStore("Tech Bookstore", "123 Main St", "555-1234", "contact@techbooks.com")
+
+# Add and remove books in the store
+store.addBook(ebook1)
+store.addBook(ebook2)
+store.addBook(ebook3)
+assert len(store.ebooklist) == 3, "Store should have 3 books"
+
+store.removeBook(ebook2)
+assert len(store.ebooklist) == 2, "Store should have 2 books after removal"
+
+# Test EbookStore setters and getters
+store.setStoreName("Advanced Tech Bookstore")
+assert store.getStoreName() == "Advanced Tech Bookstore"
+
+store.setLocation("456 Elm St")
+assert store.getLocation() == "456 Elm St"
+
+store.setContactNumber("555-5678")
+assert store.getContactNumber() == "555-5678"
+
+store.setEmailAddress("support@advancedtech.com")
+assert store.getEmailAddress() == "support@advancedtech.com"
+
+print("EbookStore test successful:", store)
+
+# Testing the ShoppingCart class
+cart = ShoppingCart("2024-01-01", "2024-01-05", "Active")
+
+# Add and remove books
+cart.addBook(ebook1)
+cart.addBook(ebook3)
+assert len(cart.getBookCollection()) == 2, "Cart should have 2 books"
+
+cart.removeBook(ebook1)
+assert len(cart.getBookCollection()) == 1, "Cart should have 1 book after removal"
+
+# Compute total
+assert cart.computeTotal() == ebook3.getCost(), "Cart total mismatch"
+
+# Test ShoppingCart setters and getters
+cart.setDateCreated("2023-12-01")
+assert cart.getDateCreated() == "2023-12-01"
+
+cart.setLastModified("2024-01-03")
+assert cart.getLastModified() == "2024-01-03"
+
+cart.setStatus("Inactive")
+assert cart.getStatus() == "Inactive"
+
+print("ShoppingCart test successful:", cart)
+
+# Testing the Order class
+order = Order("ORD001", "2024-01-10", "Pending", cart)
+
+# Calculate totals and apply discounts
+order.calculatePreDiscountTotal()
+assert order.preDiscountTotal == ebook3.getCost(), "Order pre-discount total mismatch"
+
+order.applyPromotionalDiscount(10)
+assert order.discountValue == ebook3.getCost() * 0.1, "Discount value mismatch"
+
+order.setSalesVAT(5.0)
+assert order.getSalesVAT() == 5.0, "VAT mismatch"
+
+# Test Order setters and getters
+order.setOrderNumber("ORD002")
+assert order.getOrderNumber() == "ORD002"
+
+order.setOrderPlacementDate("2024-01-15")
+assert order.getOrderPlacementDate() == "2024-01-15"
+
+order.setCurrentStatus("Shipped")
+assert order.getCurrentStatus() == "Shipped"
+
+print("Order test successful:")
+print(order.generateReceipt())
+
+# Testing the Discount class
+discount = Discount(15.0, "Seasonal Discount", True)
+assert discount.getDiscountRate() == 15.0, "Discount rate mismatch"
+assert discount.getDescription() == "Seasonal Discount", "Discount description mismatch"
+assert discount.isDiscountActive() is True, "Discount active status mismatch"
+
+discount.setDiscountRate(20.0)
+assert discount.getDiscountRate() == 20.0, "Updated discount rate mismatch"
+
+discount.setDescription("New Year Discount")
+assert discount.getDescription() == "New Year Discount", "Updated discount description mismatch"
+
+discount.setDiscountActive(False)
+assert not discount.isDiscountActive(), "Updated discount active status mismatch"
+
+print("Discount test successful:", discount)
+
+# Testing the LoyaltyDiscount class
+loyalty_discount = LoyaltyDiscount(10.0, True, True, "Loyalty Discount", True)
+assert loyalty_discount.isLoyaltyMember() is True, "Loyalty membership mismatch"
+assert loyalty_discount.isEligible() is True, "Loyalty eligibility mismatch"
+
+loyalty_discount.setLoyaltyMember(False)
+assert not loyalty_discount.isLoyaltyMember(), "Updated loyalty membership mismatch"
+
+loyalty_discount.setEligibility(False)
+assert not loyalty_discount.isEligible(), "Updated loyalty eligibility mismatch"
+
+print("LoyaltyDiscount test successful:", loyalty_discount)
+
+# Testing the BulkingDiscount class
+bulking_discount = BulkingDiscount(25.0, 3, True, "Bulk Order Discount", True)
+assert bulking_discount.getMinimumQuantity() == 3, "Bulk discount minimum quantity mismatch"
+assert bulking_discount.isEligible() is True, "Bulk discount eligibility mismatch"
+
+bulking_discount.setMinimumQuantity(5)
+assert bulking_discount.getMinimumQuantity() == 5, "Updated bulk discount minimum quantity mismatch"
+
+bulking_discount.setEligibility(False)
+assert not bulking_discount.isEligible(), "Updated bulk discount eligibility mismatch"
+
+print("BulkingDiscount test successful:", bulking_discount)
+
+# Testing the BillingInvoice class
+billing_invoice = BillingInvoice(
+    invoiceNumber="INV001",
+    invoiceDate="2024-01-20",
+    totalAmount=100.0,
+    vat=5.0,
+    discountValue=10.0,
+    netAmount=0.0,
+    customerDetails="John Doe"
+)
+
+# Set order details
+billing_invoice.setOrderDetails("Order Details: Python Programming Book")
+
+# Apply discount and VAT
+billing_invoice.applyDiscount(10)
+billing_invoice.applyVat(5)
+billing_invoice.calculateNetAmount()
+assert billing_invoice.getNetAmount() == 95.0, "Net amount calculation mismatch"
+
+# Test BillingInvoice summary
+print("BillingInvoice test successful:")
+print(billing_invoice.generateInvoiceSummary())

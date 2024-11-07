@@ -546,3 +546,5 @@ class BulkingDiscount(Discount):
     def _str_(self) -> str:
         return (f"BulkingDiscount(bulkDiscountRate={self._discount_percentage}, minimumQuantity={self._minimumQuantity}, "
                 f"discountActive={self._discountActive}, description={self._description}, eligibility={self._eligibility})")
+
+
